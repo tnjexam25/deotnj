@@ -206,6 +206,8 @@
     window.closeTransferModal = closeTransferModal;
     window.setOutofDistrict = setOutofDistrict;
     window.submitTransferAction = submitTransferAction;
+    // 👇 ADD THIS EXACT LINE RIGHT HERE 👇
+    document.getElementById("loginSubmitBtn").addEventListener("click", handleLogin);
 
     // AUTHENTICATION SECURITY CHECK CONTROLLER
     async function handleLogin() {
