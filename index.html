@@ -221,6 +221,10 @@
         // Look up credentials in the school_auth document space
         const authDocRef = doc(db, "school_auth", inputUdise);
         const authSnapshot = await getDoc(authDocRef);
+        // 👇 ADD THESE THREE DEBUG LINES HERE 👇
+        console.log("Document Exists in DB?:", authSnapshot.exists());
+        if(authSnapshot.exists()) {
+          console.log("Raw Data Found in Firestore:", authSnapshot.data());
 
         if (authSnapshot.exists() && authSnapshot.data().password === inputPassword) {
           sessionUdise = inputUdise;
