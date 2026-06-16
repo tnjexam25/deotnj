@@ -12,7 +12,426 @@
   <header class="bg-emerald-700 text-white shadow-md px-6 py-4 flex justify-between items-center">
     <div class="flex items-center space-x-3">
       <i class="fa-solid px-2 fa-school-flag text-2xl text-emerald-200"></i>
+      <h1 class="text-xl font-bold tracking-wide">TNSED Data Verification Dashboard</h1<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TNSED - School & Teacher Verification Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 font-sans min-h-screen text-slate-800">
+
+  <header class="bg-emerald-700 text-white shadow-md px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center space-x-3">
+      <i class="fa-solid px-2 fa-school-flag text-2xl text-emerald-200"></i>
       <h1 class="text-xl font-bold tracking-wide">TNSED Data Verification Dashboard</h1>
+    </div>
+    <div id="logoutSection" class="hidden">
+      <span id="displayUdise" class="bg-emerald-800 text-emerald-100 font-mono px-3 py-1 rounded text-sm mr-4"></span>
+      <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm px-4 py-1.5 rounded transition">
+        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-4 md:p-8">
+
+    <div id="loginStage" class="max-w-md mx-auto mt-12 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
+      <div class="bg-slate-900 text-white p-6 text-center">
+        <h2 class="text-xl font-bold">School Master Login</h2>
+        <p class="text-slate-400 text-xs mt-1">Enter UDISE code and password to verify system profiles</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">School UDISE Code</label>
+          <div class="relative">
+            <i class="fa-solid fa-hashtag absolute left-3 top-3 text-slate-400"></i>
+            <input type="text" id="loginUdise" placeholder="e.g., 33210100101" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-emerald-600 font-mono">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Verification Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+        <button id="loginSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded transition shadow-sm mt-2">
+          Access Dashboard <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="dashboardStage" class="hidden space-y-6">
+      
+      <div class="flex border-b border-slate-300 space-x-2 bg-white px-4 pt-3 rounded-t-lg shadow-sm">
+        <button id="tabSchoolBtn" class="px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition">
+          <i class="fa-solid fa-building-columns mr-1"></i> 1. School Information
+        </button>
+        <button id="tabTeacherBtn" class="px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition">
+          <i class="fa-solid fa-user-graduate mr-1"></i> 2. Staff Profiles Data
+        </button>
+      </div>
+
+      <div id="panelSchool" class="bg-white rounded-b-xl shadow p-6 border-x border-b border-slate-200">
+        <h3 class="text-lg font-bold border-b border-slate-200 pb-2 mb-4 text-slate-700">Verify School Structural Baseline</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">School Profile Name</label>
+            <input type="text" id="schName" class="w-full p-2 border border-slate-300 rounded focus:outline-emerald-600">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">Administrative Block</label>
+            <input type="text" id="schBlock" class="w-full p-2 border border-slate-300 bg-slate-50 text-slate-500 rounded cursor-not-allowed" readonly>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">Educational District</label>
+            <input type="text" id="schEduDist" class="w-full p-2 border border-slate-300 bg-slate-50 text-slate-500 rounded cursor-not-allowed" readonly>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">Management Domain</label>
+            <input type="text" id="schMgmt" class="w-full p-2 border border-slate-300 rounded focus:outline-emerald-600">
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+          <button id="approveSchoolBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded font-medium shadow transition">
+            <i class="fa-solid fa-circle-check mr-1"></i> Save & Approve School Profile
+          </button>
+        </div>
+      </div>
+
+      <div id="panelTeacher" class="hidden bg-white rounded-b-xl shadow p-6 border-x border-b border-slate-200">
+        
+        <div id="emptyTeachersMessage" class="hidden text-center py-12 space-y-3">
+          <i class="fa-solid fa-clipboard-check text-5xl text-emerald-500"></i>
+          <h4 class="text-xl font-bold text-slate-700">Verification Run Completed!</h4>
+          <p class="text-slate-500 text-sm max-w-sm mx-auto">All teachers registered under this station have been checked, corrected, and authorized.</p>
+        </div>
+
+        <div id="teacherCardContainer" class="space-y-6">
+          <div class="bg-slate-900 text-white px-4 py-2.5 rounded flex justify-between items-center shadow-inner">
+            <span class="text-xs tracking-wider uppercase font-bold text-emerald-400">Interactive Staff Audit Run</span>
+            <span id="trTracker" class="text-xs font-mono font-bold bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">Loading...</span>
+          </div>
+
+          <div id="dynamicFieldsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col md:flex-row md:justify-between items-center gap-3">
+            <button id="triggerTransferModalBtn" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-sm font-medium transition">
+              <i class="fa-solid fa-arrows-turn-to-dots mr-1"></i> Staff Transferred / Not at School
+            </button>
+            <div class="flex w-full md:w-auto justify-end space-x-2">
+              <button id="prevTeacherBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded text-sm font-medium transition">
+                <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+              </button>
+              <button id="approveTeacherBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded text-sm font-semibold shadow transition">
+                <i class="fa-solid fa-user-check mr-1"></i> Save & Verify Profile
+              </button>
+              <button id="nextTeacherBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded text-sm font-medium transition">
+                Next <i class="fa-solid fa-chevron-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="transferModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-xl border border-slate-200 max-w-sm w-full overflow-hidden">
+      <div class="bg-amber-600 text-white px-4 py-3 font-bold flex items-center space-x-2">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Modify Location Link</span>
+      </div>
+      <div class="p-4 space-y-4">
+        <p class="text-xs text-slate-600 leading-relaxed">Route this teacher profile out of your workspace queue. Select destination or flag out-of-district.</p>
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Target School UDISE Location Code</label>
+          <input type="text" id="newUdiseInput" placeholder="Enter 11-digit code" class="w-full px-3 py-2 border border-slate-300 rounded font-mono focus:outline-amber-600">
+        </div>
+        
+        <div class="flex justify-between items-center pt-2">
+          <button id="setOutDistrictBtn" class="text-xs font-semibold text-amber-700 hover:underline">
+            <i class="fa-solid fa-earth-asia mr-0.5"></i> Set Out-of-District (9999)
+          </button>
+          <div class="flex space-x-2">
+            <button id="closeTransferModalBtn" class="bg-slate-200 text-slate-700 px-3 py-1.5 rounded text-xs font-medium hover:bg-slate-300">Cancel</button>
+            <button id="submitTransferBtn" class="bg-amber-600 text-white px-4 py-1.5 rounded text-xs font-bold hover:bg-amber-700 shadow">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 🔒 LIVE FIREBASE PROJECT CONFIGURATION
+    const firebaseConfig = {
+      apiKey: "AIzaSyCO6sgg1cFIFv6AoacPl6wPAPDPe4AN_BQ",
+      authDomain: "tnjexams-525d2.firebaseapp.com",
+      projectId: "tnjexams-525d2",
+      storageBucket: "tnjexams-525d2.firebasestorage.app",
+      messagingSenderId: "435119259946",
+      appId: "1:435119259946:web:bb2e88070627260af8de53",
+      measurementId: "G-5SN3TZXBJL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let sessionUdise = null;
+    let schoolProfileData = null;
+    let teachersCache = [];
+    let teacherIndex = 0;
+
+    // Administrative internal tracking keys that should NOT be editable fields in the form
+    const excludedKeys = ["fId", "verified_by_hm", "exam_duty_status", "is_resource_person", "udise_code"];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loginSubmitBtn").addEventListener("click", handleLogin);
+      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+      document.getElementById("tabSchoolBtn").addEventListener("click", () => switchTab('school'));
+      document.getElementById("tabTeacherBtn").addEventListener("click", () => switchTab('teacher'));
+      document.getElementById("approveSchoolBtn").addEventListener("click", approveSchoolDetails);
+      document.getElementById("prevTeacherBtn").addEventListener("click", () => navigateTeacher(-1));
+      document.getElementById("nextTeacherBtn").addEventListener("click", () => navigateTeacher(1));
+      document.getElementById("approveTeacherBtn").addEventListener("click", approveCurrentTeacher);
+      document.getElementById("triggerTransferModalBtn").addEventListener("click", triggerTransferModal);
+      document.getElementById("closeTransferModalBtn").addEventListener("click", closeTransferModal);
+      document.getElementById("setOutDistrictBtn").addEventListener("click", () => document.getElementById("newUdiseInput").value = "9999");
+      document.getElementById("submitTransferBtn").addEventListener("click", submitTransferAction);
+    });
+
+    async function handleLogin() {
+      const inputUdise = document.getElementById("loginUdise").value.trim();
+      const inputPassword = document.getElementById("loginPassword").value.trim();
+
+      if(!inputUdise || !inputPassword) {
+        alert("Please complete all identification fields.");
+        return;
+      }
+
+      try {
+        const authDocRef = doc(db, "school_auth", inputUdise);
+        const authSnapshot = await getDoc(authDocRef);
+
+        if (authSnapshot.exists() && authSnapshot.data().password === inputPassword) {
+          sessionUdise = inputUdise;
+          document.getElementById("loginStage").classList.add("hidden");
+          document.getElementById("dashboardStage").classList.remove("hidden");
+          document.getElementById("logoutSection").classList.remove("hidden");
+          document.getElementById("displayUdise").innerText = `UDISE: ${sessionUdise}`;
+          await initializeDashboardWorkspace();
+        } else {
+          alert("Authentication failed: Invalid credentials provided.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error connecting to server authentication layer.");
+      }
+    }
+
+    async function initializeDashboardWorkspace() {
+      const schoolDocRef = doc(db, "schools", sessionUdise);
+      const schoolSnapshot = await getDoc(schoolDocRef);
+      
+      if(schoolSnapshot.exists()) {
+        schoolProfileData = schoolSnapshot.data();
+        document.getElementById("schName").value = schoolProfileData.school_name || "";
+        document.getElementById("schBlock").value = schoolProfileData.block || "";
+        document.getElementById("schEduDist").value = schoolProfileData.education_district || "";
+        document.getElementById("schMgmt").value = schoolProfileData.management || "";
+      }
+
+      const trQuery = query(collection(db, "teachers"), where("udise_code", "==", sessionUdise));
+      const trSnapshot = await getDocs(trQuery);
+      
+      teachersCache = [];
+      trSnapshot.forEach(docSnapshot => {
+        teachersCache.push({ fId: docSnapshot.id, ...docSnapshot.data() });
+      });
+
+      teacherIndex = 0;
+      renderTeacherProfileCard();
+    }
+
+    function switchTab(targetTab) {
+      const btnSchool = document.getElementById("tabSchoolBtn");
+      const btnTeacher = document.getElementById("tabTeacherBtn");
+      const panelSchool = document.getElementById("panelSchool");
+      const panelTeacher = document.getElementById("panelTeacher");
+
+      if(targetTab === 'school') {
+        btnSchool.className = "px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition";
+        btnTeacher.className = "px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition";
+        panelSchool.classList.remove("hidden");
+        panelTeacher.classList.add("hidden");
+      } else {
+        btnTeacher.className = "px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition";
+        btnSchool.className = "px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition";
+        panelSchool.classList.add("hidden");
+        panelTeacher.classList.remove("hidden");
+      }
+    }
+
+    async function approveSchoolDetails() {
+      try {
+        const schoolDocRef = doc(db, "schools", sessionUdise);
+        await updateDoc(schoolDocRef, {
+          school_name: document.getElementById("schName").value.trim(),
+          management: document.getElementById("schMgmt").value.trim(),
+          school_verified: true
+        });
+        alert("School configuration records securely saved and verified!");
+      } catch (err) {
+        console.error(err);
+        alert("Could not update school profile parameters.");
+      }
+    }
+
+    // DYNAMIC DATA FORM ENGINE GENERATOR
+    function renderTeacherProfileCard() {
+      const container = document.getElementById("teacherCardContainer");
+      const emptyBox = document.getElementById("emptyTeachersMessage");
+      const dynamicFieldsContainer = document.getElementById("dynamicFieldsContainer");
+
+      if (teachersCache.length === 0) {
+        container.classList.add("hidden");
+        emptyBox.classList.remove("hidden");
+        return;
+      }
+
+      container.classList.remove("hidden");
+      emptyBox.classList.add("hidden");
+
+      document.getElementById("trTracker").innerText = `Staff Member ${teacherIndex + 1} of ${teachersCache.length}`;
+      
+      const currentTeacher = teachersCache[teacherIndex];
+      dynamicFieldsContainer.innerHTML = ""; // Clean workspace slate
+
+      // Loop through every single available key inside the document record dynamically
+      Object.keys(currentTeacher).forEach(key => {
+        if (excludedKeys.includes(key)) return; // Skip structural internal properties
+
+        const fieldWrapper = document.createElement("div");
+        
+        // Clean up database snake_case keys into crisp visual uppercase form labels
+        const localizedLabel = key.split('_')
+                                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                  .join(' ');
+
+        // Protect unique identification keys from rogue field updates
+        const isReadonly = (key === "staff_id") ? "bg-slate-50 text-slate-600 font-mono cursor-not-allowed" : "focus:outline-emerald-600 font-medium";
+        const readonlyAttr = (key === "staff_id") ? "readonly" : "";
+
+        fieldWrapper.innerHTML = `
+          <label class="block text-xs font-bold text-slate-500 mb-1">${localizedLabel}</label>
+          <input type="text" data-field="${key}" value="${currentTeacher[key] || ''}" ${readonlyAttr} class="w-full p-2 border border-slate-300 rounded ${isReadonly}">
+        `;
+        
+        dynamicFieldsContainer.appendChild(fieldWrapper);
+      });
+    }
+
+    function navigateTeacher(direction) {
+      let targetIndex = teacherIndex + direction;
+      if (targetIndex >= 0 && targetIndex < teachersCache.length) {
+        teacherIndex = targetIndex;
+        renderTeacherProfileCard();
+      }
+    }
+
+    async function approveCurrentTeacher() {
+      if (teachersCache.length === 0) return;
+      const currentTeacher = teachersCache[teacherIndex];
+      const inputs = document.querySelectorAll("#dynamicFieldsContainer input");
+      
+      const updatedData = {
+        verified_by_hm: true
+      };
+
+      // Extract current values back out of all dynamic form elements
+      inputs.forEach(input => {
+        const fieldKey = input.getAttribute("data-field");
+        updatedData[fieldKey] = input.value.trim();
+        
+        // Synchronize values into local caching array layers instantly
+        teachersCache[teacherIndex][fieldKey] = input.value.trim();
+      });
+
+      try {
+        const trDocRef = doc(db, "teachers", currentTeacher.fId);
+        await updateDoc(trDocRef, updatedData);
+
+        alert("Staff verification entry recorded!");
+        if (teacherIndex < teachersCache.length - 1) {
+          teacherIndex++;
+          renderTeacherProfileCard();
+        }
+      } catch(err) {
+        console.error(err);
+        alert("Error logging teacher profile verification data.");
+      }
+    }
+
+    function triggerTransferModal() {
+      if (teachersCache.length === 0) return;
+      document.getElementById("newUdiseInput").value = "";
+      document.getElementById("transferModal").classList.remove("hidden");
+    }
+
+    function closeTransferModal() {
+      document.getElementById("transferModal").classList.add("hidden");
+    }
+
+    async function submitTransferAction() {
+      const targetNewUdise = document.getElementById("newUdiseInput").value.trim();
+      if(!targetNewUdise) {
+        alert("Please enter a valid target tracking location point.");
+        return;
+      }
+
+      const currentTeacher = teachersCache[teacherIndex];
+      try {
+        const trDocRef = doc(db, "teachers", currentTeacher.fId);
+        await updateDoc(trDocRef, {
+          udise_code: targetNewUdise,
+          verified_by_hm: false
+        });
+
+        teachersCache.splice(teacherIndex, 1);
+        closeTransferModal();
+        alert("Staff successfully routed out of workspace queue.");
+
+        if (teacherIndex >= teachersCache.length && teacherIndex > 0) {
+          teacherIndex--;
+        }
+        renderTeacherProfileCard();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to process system routing instruction.");
+      }
+    }
+
+    function handleLogout() {
+      sessionUdise = null;
+      teachersCache = [];
+      document.getElementById("dashboardStage").classList.add("hidden");
+      document.getElementById("logoutSection").classList.add("hidden");
+      document.getElementById("loginStage").classList.remove("hidden");
+      document.getElementById("loginUdise").value = "";
+      document.getElementById("loginPassword").value = "";
+    }
+  </script>
+</body>
+</html>
     </div>
     <div id="logoutSection" class="hidden">
       <span id="displayUdise" class="bg-emerald-800 text-emerald-100 font-mono px-3 py-1 rounded text-sm mr-4"></span>
