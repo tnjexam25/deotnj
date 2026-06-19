@@ -1,411 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TNSED - School & Teacher Verification Portal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-slate-100 font-sans min-h-screen text-slate-800 flex flex-col">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMMS MCQ Portal | WWW.TNCLASSROOM.COM</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <header class="bg-emerald-700 text-white shadow-md px-6 py-4 flex justify-between items-center w-full shrink-0">
-    <div class="flex items-center space-x-3">
-      <i class="fa-solid fa-school-flag text-2xl text-emerald-200 px-1"></i>
-      <h1 class="text-xl font-bold tracking-wide">TNSED Data Verification Dashboard</h1>
-    </div>
-    <div id="logoutSection" class="hidden flex items-center">
-      <span id="displayUdise" class="bg-emerald-800 text-emerald-100 font-mono px-3 py-1 rounded text-sm mr-4"></span>
-      <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm px-4 py-1.5 rounded transition">
-        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
-      </button>
-    </div>
-  </header>
-
-  <main class="flex-grow w-full max-w-5xl mx-auto p-4 md:p-8 flex flex-col justify-start">
-
-    <div id="loginStage" class="max-w-md w-full mx-auto mt-16 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
-      <div class="bg-slate-900 text-white p-6 text-center">
-        <h2 class="text-xl font-bold">School Master Login</h2>
-        <p class="text-slate-400 text-xs mt-1">Enter UDISE code and password to verify system profiles</p>
-      </div>
-      <div class="p-6 space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">School UDISE Code</label>
-          <div class="relative">
-            <i class="fa-solid fa-hashtag absolute left-3 top-3 text-slate-400"></i>
-            <input type="text" id="loginUdise" placeholder="e.g., 33210100101" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-emerald-600 font-mono">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Verification Password</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400"></i>
-            <input type="password" id="loginPassword" placeholder="••••••••" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-emerald-600">
-          </div>
-        </div>
-        <button id="loginSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded transition shadow-sm mt-2">
-          Access Dashboard <i class="fa-solid fa-arrow-right ml-1"></i>
-        </button>
-      </div>
-    </div>
-
-    <div id="dashboardStage" class="hidden space-y-6 w-full">
-      
-      <div class="flex border-b border-slate-300 space-x-2 bg-white px-4 pt-3 rounded-t-lg shadow-sm">
-        <button id="tabSchoolBtn" class="px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition">
-          <i class="fa-solid fa-building-columns mr-1"></i> 1. School Information
-        </button>
-        <button id="tabTeacherBtn" class="px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition">
-          <i class="fa-solid fa-user-graduate mr-1"></i> 2. Staff Profiles Data
-        </button>
-      </div>
-
-      <div id="panelSchool" class="bg-white rounded-b-xl shadow p-6 border-x border-b border-slate-200">
-        <h3 class="text-lg font-bold border-b border-slate-200 pb-2 mb-4 text-slate-700">Verify School Structural Baseline</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">School Profile Name</label>
-            <input type="text" id="schName" class="w-full p-2 border border-slate-300 rounded focus:outline-emerald-600">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Administrative Block</label>
-            <input type="text" id="schBlock" class="w-full p-2 border border-slate-300 bg-slate-50 text-slate-500 rounded cursor-not-allowed" readonly>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Educational District</label>
-            <input type="text" id="schEduDist" class="w-full p-2 border border-slate-300 bg-slate-50 text-slate-500 rounded cursor-not-allowed" readonly>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">Management Domain</label>
-            <input type="text" id="schMgmt" class="w-full p-2 border border-slate-300 rounded focus:outline-emerald-600">
-          </div>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
-          <button id="approveSchoolBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded font-medium shadow transition">
-            <i class="fa-solid fa-circle-check mr-1"></i> Save & Approve School Profile
-          </button>
-        </div>
-      </div>
-
-      <div id="panelTeacher" class="hidden bg-white rounded-b-xl shadow p-6 border-x border-b border-slate-200">
-        
-        <div id="emptyTeachersMessage" class="hidden text-center py-12 space-y-3">
-          <i class="fa-solid fa-clipboard-check text-5xl text-emerald-500"></i>
-          <h4 class="text-xl font-bold text-slate-700">Verification Run Completed!</h4>
-          <p class="text-slate-500 text-sm max-w-sm mx-auto">All teachers registered under this station have been checked, corrected, and authorized.</p>
-        </div>
-
-        <div id="teacherCardContainer" class="space-y-6">
-          <div class="bg-slate-900 text-white px-4 py-2.5 rounded flex justify-between items-center shadow-inner">
-            <span class="text-xs tracking-wider uppercase font-bold text-emerald-400">Interactive Staff Audit Run</span>
-            <span id="trTracker" class="text-xs font-mono font-bold bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">Loading...</span>
-          </div>
-
-          <div id="dynamicFieldsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col md:flex-row md:justify-between items-center gap-3">
-            <button id="triggerTransferModalBtn" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-sm font-medium transition">
-              <i class="fa-solid fa-arrows-turn-to-dots mr-1"></i> Staff Transferred / Not at School
-            </button>
-            <div class="flex w-full md:w-auto justify-end space-x-2">
-              <button id="prevTeacherBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded text-sm font-medium transition">
-                <i class="fa-solid fa-chevron-left mr-1"></i> Prev
-              </button>
-              <button id="approveTeacherBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded text-sm font-semibold shadow transition">
-                <i class="fa-solid fa-user-check mr-1"></i> Save & Verify Profile
-              </button>
-              <button id="nextTeacherBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded text-sm font-medium transition">
-                Next <i class="fa-solid fa-chevron-right ml-1"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <div id="transferModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-xl shadow-xl border border-slate-200 max-w-sm w-full overflow-hidden">
-      <div class="bg-amber-600 text-white px-4 py-3 font-bold flex items-center space-x-2">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        <span>Modify Location Link</span>
-      </div>
-      <div class="p-4 space-y-4">
-        <p class="text-xs text-slate-600 leading-relaxed">Route this teacher profile out of your workspace queue. Select destination or flag out-of-district.</p>
-        
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Target School UDISE Location Code</label>
-          <input type="text" id="newUdiseInput" placeholder="Enter 11-digit code" class="w-full px-3 py-2 border border-slate-300 rounded font-mono focus:outline-amber-600">
-        </div>
-        
-        <div class="flex justify-between items-center pt-2">
-          <button id="setOutDistrictBtn" class="text-xs font-semibold text-amber-700 hover:underline">
-            <i class="fa-solid fa-earth-asia mr-0.5"></i> Set Out-of-District (9999)
-          </button>
-          <div class="flex space-x-2">
-            <button id="closeTransferModalBtn" class="bg-slate-200 text-slate-700 px-3 py-1.5 rounded text-xs font-medium hover:bg-slate-300">Cancel</button>
-            <button id="submitTransferBtn" class="bg-amber-600 text-white px-4 py-1.5 rounded text-xs font-bold hover:bg-amber-700 shadow">Confirm</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // 🔒 LIVE FIREBASE PROJECT CONFIGURATION
-    const firebaseConfig = {
-      apiKey: "AIzaSyCO6sgg1cFIFv6AoacPl6wPAPDPe4AN_BQ",
-      authDomain: "tnjexams-525d2.firebaseapp.com",
-      projectId: "tnjexams-525d2",
-      storageBucket: "tnjexams-525d2.firebasestorage.app",
-      messagingSenderId: "435119259946",
-      appId: "1:435119259946:web:bb2e88070627260af8de53",
-      measurementId: "G-5SN3TZXBJL"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let sessionUdise = null;
-    let schoolProfileData = null;
-    let teachersCache = [];
-    let teacherIndex = 0;
-
-    const excludedKeys = ["fId", "verified_by_hm", "exam_duty_status", "is_resource_person", "udise_code"];
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("loginSubmitBtn").addEventListener("click", handleLogin);
-      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
-      document.getElementById("tabSchoolBtn").addEventListener("click", () => switchTab('school'));
-      document.getElementById("tabTeacherBtn").addEventListener("click", () => switchTab('teacher'));
-      document.getElementById("approveSchoolBtn").addEventListener("click", approveSchoolDetails);
-      document.getElementById("prevTeacherBtn").addEventListener("click", () => navigateTeacher(-1));
-      document.getElementById("nextTeacherBtn").addEventListener("click", () => navigateTeacher(1));
-      document.getElementById("approveTeacherBtn").addEventListener("click", approveCurrentTeacher);
-      document.getElementById("triggerTransferModalBtn").addEventListener("click", triggerTransferModal);
-      document.getElementById("closeTransferModalBtn").addEventListener("click", closeTransferModal);
-      document.getElementById("setOutDistrictBtn").addEventListener("click", () => document.getElementById("newUdiseInput").value = "9999");
-      document.getElementById("submitTransferBtn").addEventListener("click", submitTransferAction);
-    });
-
-    async function handleLogin() {
-      const inputUdise = document.getElementById("loginUdise").value.trim();
-      const inputPassword = document.getElementById("loginPassword").value.trim();
-
-      if(!inputUdise || !inputPassword) {
-        alert("Please complete all identification fields.");
-        return;
-      }
-
-      try {
-        const authDocRef = doc(db, "school_auth", inputUdise);
-        const authSnapshot = await getDoc(authDocRef);
-
-        if (authSnapshot.exists() && authSnapshot.data().password === inputPassword) {
-          sessionUdise = inputUdise;
-          document.getElementById("loginStage").classList.add("hidden");
-          document.getElementById("dashboardStage").classList.remove("hidden");
-          document.getElementById("logoutSection").classList.remove("hidden");
-          document.getElementById("displayUdise").innerText = `UDISE: ${sessionUdise}`;
-          await initializeDashboardWorkspace();
-        } else {
-          alert("Authentication failed: Invalid credentials provided.");
+    <script>
+      window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            ignoreHtmlClass: 'tex2jax_ignore',
+            processHtmlClass: 'tex2jax_process'
         }
-      } catch (err) {
-        console.error(err);
-        alert("Error connecting to server authentication layer.");
-      }
-    }
-
-    async function initializeDashboardWorkspace() {
-      const schoolDocRef = doc(db, "schools", sessionUdise);
-      const schoolSnapshot = await getDoc(schoolDocRef);
-      
-      if(schoolSnapshot.exists()) {
-        schoolProfileData = schoolSnapshot.data();
-        document.getElementById("schName").value = schoolProfileData.school_name || "";
-        document.getElementById("schBlock").value = schoolProfileData.block || "";
-        document.getElementById("schEduDist").value = schoolProfileData.education_district || "";
-        document.getElementById("schMgmt").value = schoolProfileData.management || "";
-      }
-
-      const trQuery = query(collection(db, "teachers"), where("udise_code", "==", sessionUdise));
-      const trSnapshot = await getDocs(trQuery);
-      
-      teachersCache = [];
-      trSnapshot.forEach(docSnapshot => {
-        teachersCache.push({ fId: docSnapshot.id, ...docSnapshot.data() });
-      });
-
-      teacherIndex = 0;
-      renderTeacherProfileCard();
-    }
-
-    function switchTab(targetTab) {
-      const btnSchool = document.getElementById("tabSchoolBtn");
-      const btnTeacher = document.getElementById("tabTeacherBtn");
-      const panelSchool = document.getElementById("panelSchool");
-      const panelTeacher = document.getElementById("panelTeacher");
-
-      if(targetTab === 'school') {
-        btnSchool.className = "px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition";
-        btnTeacher.className = "px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition";
-        panelSchool.classList.remove("hidden");
-        panelTeacher.classList.add("hidden");
-      } else {
-        btnTeacher.className = "px-5 py-2.5 font-semibold text-sm rounded-t border-b-2 border-emerald-600 text-emerald-700 transition";
-        btnSchool.className = "px-5 py-2.5 font-semibold text-sm rounded-t text-slate-500 hover:text-slate-800 transition";
-        panelSchool.classList.add("hidden");
-        panelTeacher.classList.remove("hidden");
-      }
-    }
-
-    async function approveSchoolDetails() {
-      try {
-        const schoolDocRef = doc(db, "schools", sessionUdise);
-        await updateDoc(schoolDocRef, {
-          school_name: document.getElementById("schName").value.trim(),
-          management: document.getElementById("schMgmt").value.trim(),
-          school_verified: true
-        });
-        alert("School configuration records securely saved and verified!");
-      } catch (err) {
-        console.error(err);
-        alert("Could not update school profile parameters.");
-      }
-    }
-
-    function renderTeacherProfileCard() {
-      const container = document.getElementById("teacherCardContainer");
-      const emptyBox = document.getElementById("emptyTeachersMessage");
-      const dynamicFieldsContainer = document.getElementById("dynamicFieldsContainer");
-
-      if (teachersCache.length === 0) {
-        container.classList.add("hidden");
-        emptyBox.classList.remove("hidden");
-        return;
-      }
-
-      container.classList.remove("hidden");
-      emptyBox.classList.add("hidden");
-
-      document.getElementById("trTracker").innerText = `Staff Member ${teacherIndex + 1} of ${teachersCache.length}`;
-      
-      const currentTeacher = teachersCache[teacherIndex];
-      dynamicFieldsContainer.innerHTML = ""; 
-
-      Object.keys(currentTeacher).forEach(key => {
-        if (excludedKeys.includes(key)) return; 
-
-        const fieldWrapper = document.createElement("div");
-        const localizedLabel = key.split('_')
-                                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                                  .join(' ');
-
-        const isReadonly = (key === "staff_id") ? "bg-slate-50 text-slate-600 font-mono cursor-not-allowed" : "focus:outline-emerald-600 font-medium";
-        const readonlyAttr = (key === "staff_id") ? "readonly" : "";
-
-        fieldWrapper.innerHTML = `
-          <label class="block text-xs font-bold text-slate-500 mb-1">${localizedLabel}</label>
-          <input type="text" data-field="${key}" value="${currentTeacher[key] || ''}" ${readonlyAttr} class="w-full p-2 border border-slate-300 rounded ${isReadonly}">
-        `;
-        
-        dynamicFieldsContainer.appendChild(fieldWrapper);
-      });
-    }
-
-    function navigateTeacher(direction) {
-      let targetIndex = teacherIndex + direction;
-      if (targetIndex >= 0 && targetIndex < teachersCache.length) {
-        teacherIndex = targetIndex;
-        renderTeacherProfileCard();
-      }
-    }
-
-    async function approveCurrentTeacher() {
-      if (teachersCache.length === 0) return;
-      const currentTeacher = teachersCache[teacherIndex];
-      const inputs = document.querySelectorAll("#dynamicFieldsContainer input");
-      
-      const updatedData = {
-        verified_by_hm: true
       };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-      inputs.forEach(input => {
-        const fieldKey = input.getAttribute("data-field");
-        updatedData[fieldKey] = input.value.trim();
-        teachersCache[teacherIndex][fieldKey] = input.value.trim();
-      });
+    <style>
+        body { -webkit-tap-highlight-color: transparent; font-family: sans-serif; background-color: #f0f4f8; }
 
-      try {
-        const trDocRef = doc(db, "teachers", currentTeacher.fId);
-        await updateDoc(trDocRef, updatedData);
-
-        alert("Staff verification entry recorded!");
-        if (teacherIndex < teachersCache.length - 1) {
-          teacherIndex++;
-          renderTeacherProfileCard();
+        .tamil-fix, mjx-utext, mjx-c {
+            font-family: 'Segoe UI', 'Latha', 'Tamil Sangam MN', sans-serif !important;
+            font-style: normal !important;
+            display: inline-block !important;
         }
-      } catch(err) {
-        console.error(err);
-        alert("Error logging teacher profile verification data.");
-      }
-    }
 
-    function triggerTransferModal() {
-      if (teachersCache.length === 0) return;
-      document.getElementById("newUdiseInput").value = "";
-      document.getElementById("transferModal").classList.remove("hidden");
-    }
+        .stat-card { background: white; border: 1px solid #cbd5e1; border-radius: 1rem; padding: 10px; text-align: center; }
+        .palette-btn { width: 35px; height: 35px; border-radius: 8px; font-weight: 800; font-size: 12px; transition: 0.2s; cursor: pointer; }
+        .p-unanswered { background: #e2e8f0; color: #64748b; }
+        .p-answered { background: #0f766e; color: white; }
+        .p-skipped { background: #d97706; color: white; }
+        .p-current { border: 3px solid #0f172a; background: white; color: #0f172a; transform: scale(1.1); }
 
-    function closeTransferModal() {
-      document.getElementById("transferModal").classList.add("hidden");
-    }
+        .option-selected { background-color: #f0fdfa !important; border-color: #0f766e !important; box-shadow: 0 0 0 1px #0f766e; }
+        .glass-nav { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-top: 1px solid #cbd5e1; }
 
-    async function submitTransferAction() {
-      const targetNewUdise = document.getElementById("newUdiseInput").value.trim();
-      if(!targetNewUdise) {
-        alert("Please enter a valid target tracking location point.");
-        return;
-      }
+        .quiz-footer { text-align: center; padding: 10px; font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #0f766e; opacity: 0.5; text-transform: uppercase; }
 
-      const currentTeacher = teachersCache[teacherIndex];
-      try {
-        const trDocRef = doc(db, "teachers", currentTeacher.fId);
-        await updateDoc(trDocRef, {
-          udise_code: targetNewUdise,
-          verified_by_hm: false
+        #pdf-content { background: white !important; }
+        #pdf-header-brand, #pdf-footer-brand { display: none; }
+
+        #pdf-header-brand, #display-score, #user-details-pdf {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        .correction-card {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            background-color: #fff;
+            display: block;
+            position: relative;
+        }
+
+        #pdf-watermark-main {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 5rem; color: rgba(0, 0, 0, 0.05) !important; font-weight: 900; z-index: 9999; white-space: nowrap; pointer-events: none;
+        }
+
+        #q-text, #options-list button div {
+            white-space: normal !important;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <div class="w-full py-2 bg-white text-center border-b border-gray-200 sticky top-0 z-50">
+        <span id="display-subject" class="text-[#0f766e] font-black text-[10px] tracking-widest uppercase">LOADING...</span>
+    </div>
+
+    <div id="section-reg" class="flex items-center justify-center min-h-[85vh] p-4">
+        <div class="w-full max-w-md bg-white rounded-[2.5rem] p-8 shadow-2xl border-t-8 border-[#0f766e]">
+            
+            <div id="maintenance-block" class="hidden text-center py-6">
+                <div class="text-5xl mb-4">🚧</div>
+                <h2 class="text-xl font-black text-slate-800 uppercase mb-2">Portal Under Maintenance</h2>
+                <p class="text-sm font-bold text-slate-500 leading-relaxed">The NMMS assessment portal is temporarily closed for configuration updates. Please check back later.</p>
+            </div>
+
+            <div id="login-fields">
+                <h2 class="text-2xl font-black text-[#0f766e] text-center mb-6 uppercase">NMMS MCQ LOGIN</h2>
+                <div class="space-y-4">
+                    <input type="text" id="userName" class="w-full p-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 placeholder-slate-400" placeholder="Student Name">
+                    <input type="text" id="userEmis" maxlength="10" class="w-full p-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 placeholder-slate-400" placeholder="Enter EMIS ID">
+                    <input type="password" id="userPassword" class="w-full p-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 placeholder-slate-400" placeholder="Password">
+                    <select id="userDistrict" class="w-full p-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-600 appearance-none">
+                        <option value="">Select District</option>
+                    </select>
+                    <button onclick="startQuiz()" class="w-full bg-[#0f766e] hover:bg-teal-800 text-white py-4 rounded-2xl font-black shadow-lg transition">START NMMS ASSESSMENT</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="section-quiz" class="hidden min-h-screen p-4 pb-48 bg-white">
+        <div class="max-w-4xl mx-auto grid grid-cols-4 gap-2 mb-6 text-slate-600">
+            <div class="stat-card"><p class="text-[9px] font-bold uppercase">Total</p><p id="stat-total" class="font-black">0</p></div>
+            <div class="stat-card"><p class="text-[9px] font-bold text-teal-600 uppercase">Done</p><p id="stat-answered" class="font-black text-teal-700">0</p></div>
+            <div class="stat-card"><p class="text-[9px] font-bold text-amber-600 uppercase">SKIPPED</p><p id="stat-skipped" class="font-black text-amber-700">0</p></div>
+            <div class="stat-card"><p class="text-[9px] font-bold uppercase">Left</p><p id="stat-left" class="font-black">0</p></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="bg-teal-50 rounded-[2.5rem] p-6 md:p-10 border border-teal-100">
+                <div id="img-container" class="hidden mb-4 text-center"><img id="q-image" src="" class="max-h-64 mx-auto rounded-2xl shadow-sm bg-white"></div>
+                <h2 id="q-text" class="text-lg md:text-xl font-bold text-gray-800 leading-relaxed"></h2>
+            </div>
+            <div id="options-list" class="space-y-3"></div>
+            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">Navigator</p>
+                <div id="question-palette" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div class="quiz-footer">www.tnclassroom.com</div>
+        </div>
+
+        <div class="fixed bottom-0 left-0 right-0 p-4 flex justify-center z-40 bg-gradient-to-t from-white via-white to-transparent">
+            <div class="w-full max-w-lg glass-nav rounded-3xl p-3 flex justify-between gap-2 shadow-2xl bg-white">
+                <button onclick="prevQuestion()" class="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl font-bold text-xs">PREV</button>
+                <button onclick="skipQuestion()" class="flex-1 py-4 bg-amber-50 text-amber-700 rounded-2xl font-bold text-xs">SKIP</button>
+                <button id="btn-main" onclick="nextOrPreview()" class="flex-[2] py-4 bg-[#0f766e] text-white rounded-2xl font-black text-xs uppercase shadow-lg">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-preview" class="hidden min-h-screen p-4 bg-slate-50 pb-32">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-2xl font-black text-[#0f766e] mb-6 uppercase text-center">Review Answers</h2>
+            <div id="summary-list" class="space-y-3 mb-6"></div>
+            <div class="fixed bottom-0 left-0 right-0 p-6 bg-white border-t flex gap-3 z-50">
+                <button onclick="backToQuiz()" class="flex-1 py-4 bg-slate-200 text-slate-700 rounded-2xl font-black uppercase text-xs">Go Back</button>
+                <button id="preview-submit-btn" onclick="goToFeedback()" class="flex-[2] py-4 rounded-2xl font-black text-white uppercase text-xs bg-teal-700 shadow-lg">Proceed to Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-feedback" class="hidden flex items-center justify-center min-h-[90vh] p-4">
+        <div class="w-full max-w-md bg-white rounded-[2.5rem] p-10 shadow-2xl text-center">
+            <h2 class="text-2xl font-black text-gray-800 mb-6 uppercase">Feedback</h2>
+            <textarea id="feedbackText" class="w-full p-5 bg-slate-50 border-0 rounded-3xl h-32 mb-6 outline-none font-bold text-slate-700" placeholder="Share suggestions..."></textarea>
+            <button id="final-confirm-btn" onclick="finalSubmitDirect()" class="w-full bg-[#0f766e] text-white py-5 rounded-3xl font-black uppercase shadow-xl">Confirm Submit</button>
+        </div>
+    </div>
+
+    <div id="section-success" class="hidden min-h-screen p-4 bg-white">
+        <div class="max-w-3xl mx-auto py-10">
+            <div id="pdf-content" class="p-4 bg-white">
+                <div id="pdf-header-brand" class="text-center border-b-2 border-teal-900 pb-2 mb-4">
+                    <p class="text-[10px] font-black text-teal-900 uppercase">NMMS MCQ PORTAL — www.tnclassroom.com</p>
+                </div>
+                <div id="pdf-watermark-main">NMMS MCQ PORTAL</div>
+                <div class="text-center mb-6">
+                    <h2 class="text-6xl font-black text-teal-700 mb-2" id="display-score">0/0</h2>
+                    <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">NMMS Assessment Completed</p>
+                    <div id="user-details-pdf" class="mt-4 text-slate-700 font-bold text-sm bg-slate-50 p-4 rounded-xl border border-slate-200"></div>
+                </div>
+                <h3 class="font-black text-slate-800 mb-4 uppercase text-sm border-b pb-2">Correction Sheet</h3>
+                <div id="correction-list" class="space-y-6 mb-10"></div>
+                <div id="pdf-footer-brand" class="text-center border-t border-slate-200 pt-2 mt-8">
+                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">System Generated — NMMS MCQ PORTAL</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-3">
+                <button onclick="downloadCorrectionPDF()" class="w-full bg-teal-700 text-white p-5 rounded-2xl font-black shadow-lg">📊 DOWNLOAD NMMS REPORT PDF</button>
+                <button onclick="location.reload()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-black shadow-xl">CLOSE SESSION</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        // 🔒 Updated to your verification framework's target workspace project space
+        const firebaseConfig = {
+            apiKey: "AIzaSyCO6sgg1cFIFv6AoacPl6wPAPDPe4AN_BQ",
+            authDomain: "tnjexams-525d2.firebaseapp.com",
+            projectId: "tnjexams-525d2",
+            storageBucket: "tnjexams-525d2.firebasestorage.app",
+            messagingSenderId: "435119259946",
+            appId: "1:435119259946:web:bb2e88070627260af8de53",
+            measurementId: "G-5SN3TZXBJL"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.db = db; window.collection = collection; window.getDocs = getDocs; window.addDoc = addDoc; window.query = query; window.orderBy = orderBy; window.doc = doc; window.getDoc = getDoc;
+    </script>
+
+    <script>
+        const tnDistricts = ["Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kancheepuram", "Kanniyakumari", "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupathur", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"];
+        let questions = []; let currentIdx = 0; let answers = []; let skipped = [];
+
+        function renderSafeText(text) {
+            if (!text) return "";
+            let formatted = text.replace(/\r?\n/g, '<br>');
+            return formatted.replace(/[\u0b80-\u0bff]+/g, (match) => `<span class="tamil-fix">${match}</span>`);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const quizId = urlParams.get('id') || "NMMS_MAT_2026";
+            document.getElementById('display-subject').innerText = "NMMS: " + quizId.replace(/_/g, ' ');
+
+            const distSelect = document.getElementById('userDistrict');
+            tnDistricts.forEach(d => distSelect.add(new Option(d, d)));
+
+            try {
+                const maintenanceSnap = await window.getDoc(window.doc(window.db, "config", "portal"));
+                if (maintenanceSnap.exists() && maintenanceSnap.data().maintenance === true) {
+                    document.getElementById('login-fields').classList.add('hidden');
+                    document.getElementById('maintenance-block').classList.remove('hidden');
+                }
+            } catch(err) { console.log("Bypass check complete."); }
         });
 
-        teachersCache.splice(teacherIndex, 1);
-        closeTransferModal();
-        alert("Staff successfully routed out of workspace queue.");
+        // Seeded Fisher-Yates array shuffling math processor block
+        function seededShuffle(array) {
+            const today = new Date();
+            let seed = today.getFullYear() + today.getMonth() + today.getDate();
+            
+            function random() {
+                let x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            }
 
-        if (teacherIndex >= teachersCache.length && teacherIndex > 0) {
-          teacherIndex--;
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
-        renderTeacherProfileCard();
-      } catch (err) {
-        console.error(err);
-        alert("Failed to process system routing instruction.");
-      }
-    }
 
-    function handleLogout() {
-      sessionUdise = null;
-      teachersCache = [];
-      document.getElementById("dashboardStage").classList.add("hidden");
-      document.getElementById("logoutSection").classList.add("hidden");
-      document.getElementById("loginStage").classList.remove("hidden");
-      document.getElementById("loginUdise").value = "";
-      document.getElementById("loginPassword").value = "";
-    }
-  </script>
+        async function startQuiz() {
+            const name = document.getElementById('userName').value.trim();
+            const EMIS = document.getElementById('userEmis').value.trim();
+            const pass = document.getElementById('userPassword').value.trim();
+            const dist = document.getElementById('userDistrict').value;
+
+            if(!name || EMIS.length !== 10 || !pass || !dist) return alert("Details invalid. Ensure EMIS ID is exactly 10 digits.");
+
+            document.getElementById('display-subject').innerText = "CONNECTING...";
+
+            try {
+                const maintenanceSnap = await window.getDoc(window.doc(window.db, "config", "portal"));
+                if (maintenanceSnap.exists() && maintenanceSnap.data().maintenance === true) {
+                    alert("The assessment window has just closed.");
+                    location.reload();
+                    return;
+                }
+
+                const qId = new URLSearchParams(window.location.search).get('id') || "NMMS_MAT_2026";
+                let attempts = 0;
+                let success = false;
+                let qSnap;
+
+                while (attempts < 3 && !success) {
+                    try {
+                        attempts++;
+                        qSnap = await window.getDocs(window.query(window.collection(window.db, "quizzes", qId, "questions"), window.orderBy("qno")));
+                        if (qSnap.size > 0) success = true;
+                        else await new Promise(r => setTimeout(r, 1500));
+                    } catch (e) {
+                        await new Promise(r => setTimeout(r, 1500));
+                    }
+                }
+
+                if (!success || qSnap.size === 0) {
+                    document.getElementById('display-subject').innerText = "ERROR";
+                    return alert("QUIZ NOT FOUND:\nCheck that your link parameters match your Sheet tab casing perfectly.");
+                }
+
+                const rawQuestions = qSnap.docs.map(doc => doc.data());
+                questions = seededShuffle(rawQuestions);
+
+                localStorage.setItem('tnSession', JSON.stringify({name, mobile: EMIS, password: pass, dist, qId}));
+
+                const savedAnswers = localStorage.getItem('tnAnswers');
+                if (savedAnswers) {
+                    const restored = JSON.parse(savedAnswers);
+                    answers = (restored.length === questions.length) ? restored : new Array(questions.length).fill(null);
+                } else {
+                    answers = new Array(questions.length).fill(null);
+                }
+
+                document.getElementById('display-subject').innerText = qId.replace(/_/g, ' ');
+                skipped = new Array(questions.length).fill(false);
+                document.getElementById('section-reg').classList.add('hidden');
+                document.getElementById('section-quiz').classList.remove('hidden');
+                showQuestion();
+            } catch (e) { alert("Load Error."); }
+        }
+
+        function showQuestion() {
+            const q = questions[currentIdx];
+            document.getElementById('q-text').innerHTML = renderSafeText(q.question);
+            const qImg = document.getElementById('q-image');
+            if(q.imageUrl && q.imageUrl.trim() !== "") {
+                qImg.src = q.imageUrl;
+                document.getElementById('img-container').classList.remove('hidden');
+            } else {
+                document.getElementById('img-container').classList.add('hidden');
+            }
+
+            const list = document.getElementById('options-list');
+            list.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                const isSelected = answers[currentIdx] === i;
+                btn.className = `w-full p-4 flex items-center bg-white border-2 rounded-2xl text-left transition ${isSelected ? 'option-selected' : 'border-gray-100'}`;
+                btn.innerHTML = `
+                    <span class="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-[#0f766e] text-white rounded-full text-[10px] font-black mr-4">${labels[i]}</span>
+                    <div class="flex-grow font-bold text-gray-700">${renderSafeText(opt)}</div>
+                `;
+                btn.onclick = () => {
+                    answers[currentIdx] = i;
+                    skipped[currentIdx] = false;
+                    localStorage.setItem('tnAnswers', JSON.stringify(answers));
+                    showQuestion();
+                };
+                list.appendChild(btn);
+            });
+            document.getElementById('btn-main').innerText = (currentIdx === questions.length - 1) ? "Preview" : "Next";
+            updatePalette();
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([document.getElementById('q-text')]);
+            }
+        }
+
+        function skipQuestion() {
+            if (answers[currentIdx] === null) skipped[currentIdx] = true;
+            if (currentIdx < questions.length - 1) { currentIdx++; showQuestion(); } else { showPreview(); }
+        }
+
+        function nextOrPreview() {
+            if (currentIdx < questions.length - 1) { currentIdx++; showQuestion(); } else { showPreview(); }
+        }
+
+        function prevQuestion() { if(currentIdx > 0) { currentIdx--; showQuestion(); } }
+
+        function updatePalette() {
+            const palette = document.getElementById('question-palette');
+            palette.innerHTML = '';
+            let ans = 0; let skp = 0;
+            questions.forEach((_, i) => {
+                const btn = document.createElement('button');
+                btn.innerText = i + 1;
+                let s = 'p-unanswered';
+                if (answers[i] !== null) { s = 'p-answered'; ans++; }
+                else if (skipped[i]) { s = 'p-skipped'; skp++; }
+                btn.className = `palette-btn ${s} ${i === currentIdx ? 'p-current' : ''}`;
+                btn.onclick = () => { currentIdx = i; showQuestion(); };
+                palette.appendChild(btn);
+            });
+            document.getElementById('stat-total').innerText = questions.length;
+            document.getElementById('stat-answered').innerText = ans;
+            document.getElementById('stat-skipped').innerText = skp;
+            document.getElementById('stat-left').innerText = questions.length - ans - skp;
+        }
+
+        function showPreview() {
+            document.getElementById('section-quiz').classList.add('hidden');
+            document.getElementById('section-preview').classList.remove('hidden');
+            const summary = document.getElementById('summary-list'); summary.innerHTML = '';
+            let allAnswered = true;
+            questions.forEach((q, i) => {
+                const isAns = answers[i] !== null; if(!isAns) allAnswered = false;
+                const div = document.createElement('div');
+                div.className = "p-4 bg-white rounded-xl border flex justify-between items-center shadow-sm";
+                div.innerHTML = `<div class="flex items-center gap-3"><span class="w-8 h-8 bg-slate-100 flex items-center justify-center rounded-lg font-black text-xs">${i+1}</span><span class="text-sm font-bold ${isAns ? 'text-teal-600' : 'text-red-500'}">${isAns ? 'DONE' : 'SKIPPED'}</span></div><button onclick="backToSpecificQ(${i})" class="text-[10px] font-black text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Edit</button>`;
+                summary.appendChild(div);
+            });
+            const btn = document.getElementById('preview-submit-btn');
+            btn.innerText = allAnswered ? "Proceed to Submit" : "Complete all to submit";
+            btn.style.opacity = allAnswered ? "1" : "0.5";
+            btn.style.pointerEvents = allAnswered ? "auto" : "none";
+        }
+
+        function backToQuiz() { document.getElementById('section-preview').classList.add('hidden'); document.getElementById('section-quiz').classList.remove('hidden'); }
+        function backToSpecificQ(idx) { currentIdx = idx; backToQuiz(); showQuestion(); }
+        function goToFeedback() { document.getElementById('section-preview').classList.add('hidden'); document.getElementById('section-feedback').classList.remove('hidden'); }
+
+        async function finalSubmitDirect() {
+            const btn = document.getElementById('final-confirm-btn');
+            btn.disabled = true;
+            btn.innerText = "SUBMITTING...";
+
+            const session = JSON.parse(localStorage.getItem('tnSession'));
+            const qId = new URLSearchParams(window.location.search).get('id') || "QUIZ";
+            const subjectTitle = qId.replace(/_/g, ' ');
+
+            document.getElementById('user-details-pdf').innerHTML = `
+                <div style="margin-bottom: 8px;">
+                    <p style="font-size: 14px; color: #0f766e; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 4px;">NMMS Subject: ${subjectTitle}</p>
+                </div>
+                <p>Name: ${session.name} | EMIS ID: ${session.mobile}</p>
+                <p>District: ${session.dist} | Date: ${new Date().toLocaleDateString()}</p>
+            `;
+
+            let score = 0;
+            const correction = document.getElementById('correction-list');
+            correction.innerHTML = '';
+
+            answers.forEach((ans, i) => {
+                const correctIdx = parseInt(questions[i].correctIndex);
+                const isCorrect = (ans === correctIdx);
+                if(isCorrect) score++;
+
+                const card = document.createElement('div');
+                card.className = `correction-card p-6 rounded-2xl border-l-8 mb-6 ${isCorrect ? 'border-teal-500 bg-teal-50' : 'border-red-50 bg-red-50'}`;
+
+                let optionsHtml = '<div class="mt-3 space-y-2">';
+                questions[i].options.forEach((opt, optIdx) => {
+                    const label = ['A', 'B', 'C', 'D'][optIdx];
+                    let statusBadge = '';
+                    let borderClass = 'border-gray-200 bg-white';
+
+                    if (optIdx === correctIdx) {
+                        statusBadge = '<span class="ml-auto text-[9px] font-black text-teal-600 bg-teal-100 px-2 py-0.5 rounded uppercase">Correct</span>';
+                        borderClass = 'border-teal-400 bg-teal-50 ring-1 ring-teal-400';
+                    } else if (optIdx === ans && !isCorrect) {
+                        statusBadge = '<span class="ml-auto text-[9px] font-black text-red-600 bg-red-100 px-2 py-0.5 rounded uppercase">Your Choice</span>';
+                        borderClass = 'border-red-400 bg-red-50';
+                    }
+                    optionsHtml += `<div class="flex items-center p-2 text-xs border rounded-lg ${borderClass}"><span class="w-5 h-5 flex items-center justify-center bg-slate-800 text-white rounded-full text-[8px] font-bold mr-2">${label}</span><span class="font-medium text-slate-700">${renderSafeText(opt)}</span>${statusBadge}</div>`;
+                });
+                optionsHtml += '</div>';
+
+                card.innerHTML = `<div class="flex justify-between items-start"><p class="text-[10px] font-black uppercase tracking-widest ${isCorrect ? 'text-teal-600' : 'text-red-600'} mb-1">Question ${i+1}</p><span class="text-[10px] font-bold px-2 py-0.5 rounded ${isCorrect ? 'bg-teal-200 text-teal-800' : 'bg-red-200 text-red-800'}">${isCorrect ? 'CORRECT' : 'WRONG'}</span></div><p class="font-bold text-slate-800 leading-snug">${renderSafeText(questions[i].question)}</p>${optionsHtml}`;
+                correction.appendChild(card);
+            });
+
+            try {
+                const feedbackVal = document.getElementById('feedbackText') ? document.getElementById('feedbackText').value : "";
+
+                await window.addDoc(window.collection(window.db, "results"), {
+                    name: session.name,
+                    mobile: session.mobile,
+                    password: session.password,
+                    dist: session.dist,
+                    feedback: feedbackVal,
+                    score,
+                    total: questions.length,
+                    timestamp: new Date(),
+                    quizId: qId
+                });
+
+                localStorage.removeItem('tnAnswers');
+                localStorage.removeItem('tnSession');
+
+                document.getElementById('display-score').innerText = `${score}/${questions.length}`;
+                document.getElementById('section-feedback').classList.add('hidden');
+                document.getElementById('section-success').classList.remove('hidden');
+
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise([document.getElementById('correction-list')]);
+                }
+                window.scrollTo(0,0);
+            } catch (e) {
+                console.error("Submission error: ", e);
+                alert("Error submitting results.");
+                btn.disabled = false;
+                btn.innerText = "Confirm Submit";
+            }
+        }
+
+        window.downloadCorrectionPDF = function() {
+            const el = document.getElementById('pdf-content');
+            const h = document.getElementById('pdf-header-brand');
+            const f = document.getElementById('pdf-footer-brand');
+            const w = document.getElementById('pdf-watermark-main');
+            const session = JSON.parse(localStorage.getItem('tnSession')) || { qId: "QUIZ", name: "Student" };
+
+            h.style.display = 'block'; f.style.display = 'block'; w.style.display = 'block';
+            const opt = { margin: [10, 5, 10, 5], filename: `NMMS_${session.qId}_${session.name}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: 'legacy' } };
+            html2pdf().set(opt).from(el).save().then(() => { h.style.display = 'none'; f.style.display = 'none'; w.style.display = 'none'; });
+        };
+    </script>
 </body>
 </html>
